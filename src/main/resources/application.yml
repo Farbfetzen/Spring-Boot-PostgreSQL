@@ -1,0 +1,7 @@
+spring:
+    application:
+        name: "spring-boot-postgresql"
+    liquibase:
+        change-log: "classpath:/db/changelog/changelog-root.xml"
+# It's unnecessary to provide spring.datasource.url etc.
+# because spring-boot-docker-compose auto-detects the correct configuration.

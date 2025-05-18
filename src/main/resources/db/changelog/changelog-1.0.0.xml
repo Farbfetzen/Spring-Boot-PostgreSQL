@@ -1,0 +1,25 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+>
+
+    <changeSet id="1" author="Farbfetzen">
+        <sql>
+            CREATE TABLE users (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                email VARCHAR NOT NULL,
+                password VARCHAR NOT NULL,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="Farbfetzen">
+        <sql>
+            INSERT INTO users (email, password) VALUES ('example@example.org', 'hunter 2')
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

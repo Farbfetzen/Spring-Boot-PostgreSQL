@@ -1,0 +1,23 @@
+services:
+    database:
+        image: "postgres:17.5"
+        ports:
+            - "5432"
+        volumes:
+            - "spring-boot-postgresql:/var/lib/postgresql/data"
+        environment:
+            - "POSTGRES_PASSWORD=password"
+
+    # Tool to view the database. Open localhost:8081 to access. Login data:
+    # Server: "database" (service name of the database)
+    # Username: "postgres"
+    # Password: "password" (see environment variable above)
+    # Database: "postgres"
+    adminer:
+        image: "adminer"
+        ports:
+            - "8081:8080"
+
+volumes:
+    spring-boot-postgresql:
+        # Nothing here indicates that the default config should be used.
