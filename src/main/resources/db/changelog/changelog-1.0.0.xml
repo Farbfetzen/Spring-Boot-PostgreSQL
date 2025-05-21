@@ -5,20 +5,27 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
 >
 
+    <!--
+        Setting the default version to 1 instead of 0 is correct. A version of 0 indicates to Spring Data JDBC
+        that an entity is new and has not yet been inserted into the database. The app would then try to use
+        an insert instead of an update on the next modification of the entity, causing an error
+        because of a duplicate primary key.
+     -->
     <changeSet id="1" author="Farbfetzen">
         <sql>
             CREATE TABLE users (
-                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                email VARCHAR NOT NULL,
-                password VARCHAR NOT NULL,
-                created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-            )
+                id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+                version int NOT NULL DEFAULT 1,
+                email varchar UNIQUE NOT NULL,
+                name varchar NOT NULL,
+                created_at timestamptz NOT NULL DEFAULT now()
+            );
         </sql>
     </changeSet>
 
     <changeSet id="2" author="Farbfetzen">
         <sql>
-            INSERT INTO users (email, password) VALUES ('example@example.org', 'hunter 2')
+            INSERT INTO users (email, name) VALUES ('theo@example.org', 'Theo Test')
         </sql>
     </changeSet>
 
