@@ -19,8 +19,8 @@ Example: `{"email":"jane@example.org","name":"jane doe"}`
 
 Modify a user by sending a POST request to the same address with the id as a URL parameter.
 This is for testing how Spring Data JDBC updates the version field.
-Example: `<http://localhost:8080/users?id=3dc65f6e-c3e4-4628-9a3d-d7608406d1fc>`
+Example: `/users?id=3dc65f6e-c3e4-4628-9a3d-d7608406d1fc`
 
-## TODO
+Run unit tests: `mvn test`
 
-- Maybe use Testcontainers to automatically set up and shut down a database for testing.
+Run integration tests: `mvn verify` 
