@@ -18,7 +18,7 @@ Create a new user by sending a PUT request to the same address with an email and
 Example: `{"email":"jane@example.org","name":"jane doe"}`
 
 Modify a user by sending a POST request to the same address with the id as a URL parameter.
-This is for testing how Spring Data JDBC updates the version field.
+This is for testing how Spring Data JDBC updates the `version` field and how the database updates the `updatedAt` date.
 Example: `/users?id=3dc65f6e-c3e4-4628-9a3d-d7608406d1fc`
 
 Run unit tests: `mvn test`
