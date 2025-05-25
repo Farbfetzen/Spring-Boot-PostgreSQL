@@ -19,14 +19,29 @@
                 email varchar UNIQUE NOT NULL,
                 name varchar NOT NULL,
                 created_at timestamptz NOT NULL DEFAULT now()
-            );
+            )
         </sql>
     </changeSet>
 
     <changeSet id="2" author="Farbfetzen">
-        <sql>
-            INSERT INTO users (email, name) VALUES ('theo@example.org', 'Theo Test')
-        </sql>
+        <sql>INSERT INTO users (email, name) VALUES ('theo@example.org', 'Theo Test')</sql>
     </changeSet>
 
+    <changeSet id="3" author="Farbfetzen">
+        <sql>ALTER TABLE users ADD updated_at timestamptz</sql>
+        <sql endDelimiter="/">
+            CREATE FUNCTION set_updated_at() RETURNS trigger LANGUAGE plpgsql AS $$
+            BEGIN
+                NEW.updated_at := now();
+                RETURN NEW;
+            END;
+            $$
+        </sql>
+        <sql>
+            CREATE TRIGGER set_updated_at_trigger BEFORE UPDATE
+            ON users
+            FOR EACH ROW
+            EXECUTE function set_updated_at()
+        </sql>
+    </changeSet>
 </databaseChangeLog>

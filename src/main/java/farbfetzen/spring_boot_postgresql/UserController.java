@@ -28,11 +28,10 @@ public class UserController {
     }
 
     @PutMapping
-    public void createUser(@RequestBody final UserDto dto) {
-        final var user = new User();
-        user.setEmail(dto.email());
-        user.setName(dto.name());
+    public void createUser(@RequestBody final NewUserDto dto) {
+        final var user = dto.toUser();
         final var insertedUser = userRepository.save(user);
+        logger.info("user:          {}", user);
         logger.info("inserted user: {}", insertedUser);
         // Notice how createdAt is null in the returned entity.
         // The return probably happens before the database generates the value.
@@ -45,7 +44,11 @@ public class UserController {
         optionalUser.ifPresent(user -> {
             // Do some nonsense with the name to make a change:
             user.setName(user.getName() + "x");
-            userRepository.save(user);
+            final User updatedUser = userRepository.save(user);
+            final User userFromSelect = userRepository.findById(user.getId()).get();
+            logger.info("updated user:                                {}", user);
+            logger.info("updated user as returned by the save method: {}", updatedUser);
+            logger.info("updated user as per select :                 {}", userFromSelect);
         });
     }
 }

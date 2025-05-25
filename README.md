@@ -24,4 +24,3 @@ Example: `<http://localhost:8080/users?id=3dc65f6e-c3e4-4628-9a3d-d7608406d1fc>`
 ## TODO
 
 - Maybe use Testcontainers to automatically set up and shut down a database for testing.
-- Add an `updated_at` column and update it automatically on each UPDATE but not on INSERT. Maybe using an [AbstractRelationalEventListener](https://docs.spring.io/spring-data/relational/reference/jdbc/events.html#jdbc.entity-callbacks)? Override `onBeforeSave` and check the id or the version to determine if it's an update. If yes, set the `updatedAt` value. Or better: Let the database manage updating this column. Define a trigger that sets it on each update. Then I can make the field final and `@ReadOnlyProperty`.
