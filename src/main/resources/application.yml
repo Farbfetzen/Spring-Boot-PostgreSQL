@@ -1,7 +1,31 @@
+logging:
+    charset:
+        console: UTF-8
+        file: UTF-8
+    file:
+        name: logs/${spring.application.name}.log
+    level:
+        root: info
+        # transactions, connections, queries, query parameters
+        # org.springframework.jdbc: trace
+        # queries
+        org.springframework.jdbc.core.JdbcTemplate: debug
+        # query parameters
+        org.springframework.jdbc.core.StatementCreatorUtils: trace
+    logback:
+        rollingpolicy:
+            file-name-pattern: logs/${spring.application.name}_%d{yyyy-MM-dd}_%i.gz
+            max-file-size: 10MB
+            max-history: 30
+    pattern:
+        console: "%date{HH:mm:ss.SSS} %highlight(%-5level) %green(%-40.40logger{39}): %message%n"
+        file: "%date{yyyy-MM-dd HH:mm:ss.SSS XXX} %level [%thread] %-40.40logger{39}: %message%n"
 spring:
     application:
-        name: "spring-boot-postgresql"
+        name: "Spring-Boot-PostgreSQL"
     liquibase:
         change-log: "classpath:/db/changelog/changelog-root.xml"
+    main:
+        banner-mode: log
 # It's unnecessary to provide spring.datasource.url etc.
 # because spring-boot-docker-compose auto-detects the correct configuration.
