@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.Instant;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,9 @@ class UserIT extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    private static class UserListTypeReference extends TypeReference<List<User>> {
+    }
+
     @Test
     void shouldGetAll() throws Exception {
         final var responseBody = mockMvc
@@ -35,17 +38,15 @@ class UserIT extends IntegrationTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        try (final MappingIterator<User> userIterator = mapper.readerFor(User.class).readValues(responseBody)) {
-            final List<User> users = userIterator.readAll();
-            assertThat(users).singleElement().satisfies(user -> {
-                assertThat(user.getId()).isNotNull();
-                assertThat(user.getVersion()).isOne();
-                assertThat(user.getCreatedAt()).isCloseTo(Instant.now(), within(5, MINUTES));
-                assertThat(user.getUpdatedAt()).isNull();
-                assertThat(user.getName()).isEqualTo("Theo Test");
-                assertThat(user.getEmail()).isEqualTo("theo@example.org");
-            });
-        }
+        final List<User> users = mapper.readValue(responseBody, new UserListTypeReference());
+        assertThat(users).singleElement().satisfies(user -> {
+            assertThat(user.getId()).isNotNull();
+            assertThat(user.getVersion()).isOne();
+            assertThat(user.getCreatedAt()).isCloseTo(Instant.now(), within(5, MINUTES));
+            assertThat(user.getUpdatedAt()).isNull();
+            assertThat(user.getName()).isEqualTo("Theo Test");
+            assertThat(user.getEmail()).isEqualTo("theo@example.org");
+        });
     }
 
     @Test
